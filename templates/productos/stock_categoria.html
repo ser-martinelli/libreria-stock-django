@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>📦 Stock por Categoría</h2>
+
+{% for categoria in categorias %}
+<div class="card mb-3 shadow-sm">
+    <div class="card-header bg-dark text-white">
+        {{ categoria.nombre }}
+    </div>
+
+    <div class="card-body">
+        <ul class="list-group">
+
+            {% for producto in categoria.producto_set.all %}
+            <li class="list-group-item d-flex justify-content-between">
+
+                {{ producto.nombre }}
+
+                {% if producto.stock_actual <= producto.stock_minimo %}
+                    <span class="badge bg-danger">
+                        {{ producto.stock_actual }}
+                    </span>
+                {% else %}
+                    <span class="badge bg-success">
+                        {{ producto.stock_actual }}
+                    </span>
+                {% endif %}
+
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">
+                Sin productos
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>📦 Entregas Internas</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Destino</th>
+                    <th>Fecha</th>
+                    <th>Cantidad de ítems</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for entrega in entregas %}
+                <tr>
+                    <td>
+                        <a href="{% url 'entrega_detail' entrega.id %}">
+                            {{ entrega.id }}
+                        </a>
+                    </td>
+                    <td>{{ entrega.destino }}</td>
+                    <td>{{ entrega.fecha|date:"d/m/Y H:i" }}</td>
+                    <td>{{ entrega.detalles.count }}</td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        No hay entregas registradas
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📦 Productos</h2>
+</div>
+
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar producto...">
+            <button class="btn btn-dark">Buscar</button>
+        </div>
+    </form>
+
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.nombre }}</td>
+
+                    <td>
+                            {% if producto.stock_actual <= producto.stock_minimo %}
+                            <span class="badge bg-danger">
+                             ⚠ {{ producto.stock_actual }} (bajo)
+                            </span>
+
+                            {% elif producto.stock_actual <= producto.stock_minimo|add:5 %}
+                            <span class="badge bg-warning text-dark">
+                                {{ producto.stock_actual }} (medio)
+                            </span>
+
+                            {% else %}
+                            <span class="badge bg-success">
+                                {{ producto.stock_actual }} (ok)
+                            </span>
+                            {% endif %}
+                    </td>
+
+                    <td>${{ producto.precio }}</td>
+
+                    <td>
+                        <a href="{% url 'producto_update' producto.id %}" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+
+                        <a href="{% url 'producto_delete' producto.id %}" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">
+                        No hay productos cargados
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

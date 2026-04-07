@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Remito Entrega</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        h2 {
+            margin-bottom: 5px;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .firma {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>📦 Remito de Entrega</h2>
+
+<div class="info">
+    <p><strong>Entrega #:</strong> {{ entrega.id }}</p>
+    <p><strong>Destino:</strong> {{ entrega.destino }}</p>
+    <p><strong>Fecha:</strong> {{ entrega.fecha|date:"d/m/Y H:i" }}</p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for detalle in entrega.detalles.all %}
+        <tr>
+            <td>{{ detalle.producto.nombre }}</td>
+            <td>{{ detalle.cantidad }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="firma">
+    <p>__________________________</p>
+    <p>Firma responsable</p>
+</div>
+
+</body>
+</html>

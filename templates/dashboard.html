@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>📊 Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-body">
+                <h5>Total productos</h5>
+                <h2>{{ total_productos }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h5>⚠ Productos con bajo stock</h5>
+
+                <ul>
+                {% for p in bajo_stock %}
+                    <li>{{ p.nombre }} ({{ p.stock_actual }})</li>
+                {% empty %}
+                    <li>No hay productos en bajo stock</li>
+                {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5>🕒 Últimos movimientos</h5>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for mov in movimientos %}
+                <tr>
+                    <td>{{ mov.producto.nombre }}</td>
+
+                    <td>
+                        {% if mov.tipo == 'entrada' %}
+                            <span class="badge bg-success">Entrada</span>
+                        {% else %}
+                            <span class="badge bg-danger">Salida</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ mov.cantidad }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}
