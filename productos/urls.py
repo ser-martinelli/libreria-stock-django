@@ -21,6 +21,10 @@ from .views import EntregaListView
 
 from .views import generar_pdf_entrega
 
+from django.contrib.auth import views as auth_views
+
+
+
 urlpatterns = [
     path('', ProductoListView.as_view(), name='producto_list'),
     path('nuevo/', ProductoCreateView.as_view(), name='producto_create'),
@@ -35,4 +39,5 @@ urlpatterns = [
     path('entregas/<int:pk>/', EntregaDetailView.as_view(), name='entrega_detail'),
     path('entregas/<int:pk>/print/', EntregaPrintView.as_view(), name='entrega_print'),
     path('entregas/<int:pk>/pdf/', generar_pdf_entrega, name='entrega_pdf'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 ]

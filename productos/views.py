@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Producto
@@ -12,7 +13,7 @@ import openpyxl
 from django.http import HttpResponse
    
 
-class ProductoListView(ListView):
+class ProductoListView(LoginRequiredMixin, ListView):
     model = Producto
     template_name = 'productos/list.html'
     context_object_name = 'productos'
@@ -24,27 +25,27 @@ class ProductoListView(ListView):
         return Producto.objects.all()
 
 
-class ProductoCreateView(CreateView):
+class ProductoCreateView(LoginRequiredMixin, CreateView):
     model = Producto
     fields = '__all__'
     template_name = 'productos/form.html'
     success_url = reverse_lazy('producto_list')
 
 
-class ProductoUpdateView(UpdateView):
+class ProductoUpdateView(LoginRequiredMixin, UpdateView):
     model = Producto
     fields = '__all__'
     template_name = 'productos/form.html'
     success_url = reverse_lazy('producto_list')
 
 
-class ProductoDeleteView(DeleteView):
+class ProductoDeleteView(LoginRequiredMixin, DeleteView):
     model = Producto
     template_name = 'productos/delete.html'
     success_url = reverse_lazy('producto_list')
 
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
@@ -64,14 +65,14 @@ class DashboardView(TemplateView):
 
 
 
-class MovimientoStockCreateView(CreateView):
+class MovimientoStockCreateView(LoginRequiredMixin, CreateView):
     model = MovimientoStock
     fields = ['producto', 'tipo', 'cantidad']
     template_name = 'productos/movimiento_form.html'
     success_url = reverse_lazy('producto_list')
 
 
-class MovimientoListView(ListView):
+class MovimientoListView(LoginRequiredMixin, ListView):
     model = MovimientoStock
     template_name = 'productos/movimientos_list.html'
     context_object_name = 'movimientos'
@@ -144,7 +145,7 @@ class StockPorCategoriaView(TemplateView):
 from django.views.generic import ListView
 from .models import EntregaInterna
 
-class EntregaListView(ListView):
+class EntregaListView(LoginRequiredMixin, ListView):
     model = EntregaInterna
     template_name = 'productos/entregas_list.html'
     context_object_name = 'entregas'
@@ -153,13 +154,13 @@ class EntregaListView(ListView):
 
 from django.views.generic import DetailView
 
-class EntregaDetailView(DetailView):
+class EntregaDetailView(LoginRequiredMixin, DetailView):
     model = EntregaInterna
     template_name = 'productos/entrega_detail.html'
     context_object_name = 'entrega'
 
 
-class EntregaPrintView(DetailView):
+class EntregaPrintView(LoginRequiredMixin, DetailView):
     model = EntregaInterna
     template_name = 'productos/entrega_print.html'
     context_object_name = 'entrega'
@@ -182,3 +183,13 @@ def generar_pdf_entrega(request, pk):
     pisa.CreatePDF(html, dest=response)
 
     return response
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Producto
+
+@login_required
+def lista_productos(request):
+    productos = Producto.objects.all()
+    return render(request, 'productos/lista.html', {'productos': productos})
